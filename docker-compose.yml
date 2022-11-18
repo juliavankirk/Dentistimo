@@ -1,0 +1,78 @@
+version: "3"
+services:
+  api-gateway:
+    build:
+      dockerfile: Dockerfile
+      context: "./api-gateway"
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+    volumes:
+      - /app/node_modules
+      - ./api-gateway:/app
+
+  frontend:
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    ports:
+      - "3030:3000"
+    environment:
+      - PORT=3000
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+
+appointmetservice:
+  stdin_open: true
+  build:
+    dockerfile: Dockerfile
+    context: ./appointmet-service
+  ports:
+    - "3040:3000"
+  environment:
+    - PORT=3000
+  volumes:
+    - /app/node_modules
+    - ./appointmet-service:/app
+
+auth-service:
+  stdin_open: true
+  build:
+    dockerfile: Dockerfile
+    context: ./auth-service
+  ports:
+    - "3030:3000"
+  environment:
+    - PORT=3000
+  volumes:
+    - /app/node_modules
+    - ./auth-service:/app
+
+dental-service:
+  stdin_open: true
+  build:
+    dockerfile: Dockerfile
+    context: ./dental-service
+  ports:
+    - "3030:3000"
+  environment:
+    - PORT=3000
+  volumes:
+    - /app/node_modules
+    - ./auth-service:/app
+
+notifications-service:
+  stdin_open: true
+  build:
+    dockerfile: Dockerfile
+    context: ./notifications-service
+  ports:
+    - "3030:3000"
+  environment:
+    - PORT=3000
+  volumes:
+    - /app/node_modules
+    - ./notifications-service:/app
