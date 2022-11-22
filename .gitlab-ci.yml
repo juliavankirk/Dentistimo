@@ -1,4 +1,4 @@
-image: docker-compose:latest
+image: tmaier/docker-compose:latest
 
 services:
   - docker:dind
@@ -7,9 +7,8 @@ before_script:
   - docker info
   - docker-compose --version
 
-buildJob:
+build image:
   stage: build
-  tags:
-    - docker
   script:
-    - docker-compose build
+    - docker-compose build    
+    - docker-compose up
