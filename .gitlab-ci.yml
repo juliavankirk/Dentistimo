@@ -12,6 +12,5 @@ build:
   stage: build
 
   script:
-    
     - docker compose up 
   
