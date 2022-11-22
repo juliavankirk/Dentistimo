@@ -1,18 +1,15 @@
-image:
-  name: docker/compose:latest
-variables:
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
+image: tmaier/docker-compose:latest
+
 services:
   - docker:dind
 
 before_script:
-  - docker version
-  - docker-compose version
+  - docker info
+  - docker-compose --version
 
-build:
+buildJob:
   stage: build
+  tags:
+    - docker
   script:
-    - docker-compose down
     - docker-compose build
-    - docker-compose up tester-image
