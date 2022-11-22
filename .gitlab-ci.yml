@@ -12,6 +12,7 @@ build:
   stage: build
 
   script:
+    - npm install
     - npm install docker-compose
     - docker image prune -f
     - docker-compose up 
