@@ -1,19 +1,16 @@
-image: docker
+image:
+  name: docker/compose:latest
 
 services:
   - docker:dind
 
-stages:
-  - build
-  
-
+before_script:
+  - docker version
+  - docker-compose version
 
 build:
   stage: build
-
   script:
-    - npm install
-    - npm install docker-compose
-    - docker image prune -f
-    - docker-compose up 
-  
+    - docker-compose down
+    - docker-compose build
+    - docker-compose up tester-image
