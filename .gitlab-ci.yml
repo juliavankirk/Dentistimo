@@ -9,8 +9,7 @@ stages:
 
 build:
   stage: build
-  only:
-    - production
+
   script:
     
     - docker-compose build
