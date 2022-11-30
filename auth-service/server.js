@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const app = express();
 
-var corsOptions = {
+const corsOptions = {
     origin: "http://localhost:8081"
 };
 
@@ -17,34 +17,20 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const db = require("./models");
 const Role = db.role;
 
-
 //to add the 3 rows manually in the db and remove the params from sync and function initial
 db.sequelize.sync({force: true}).then(() => {
     console.log('Drop and resync DB');
     initial();
 })
 
-function initial() {
-    Role.create({
-        id: 1,
-        name: "user"
-    });
-
-    Role.create({
-        id: 2,
-        name: "patient"
-    });
-
-    Role.create({
-        id: 3,
-        name: "dental-office-admin"
-    });
-
-    Role.create({
-        id: 4,
-        name: "dentist"
-    });
-}
+async function initial() {
+    Role.bulkCreate([
+        { id: 1, name: "user" },
+        { id: 2, name: "patient" },
+        { id: 3, name: "dental-office-admin" },
+        { id: 4, name: "dentist" }
+    ]).then(() => console.log("Roles are created ..."));
+};
 
 //test route
 app.get("/", (req, res) => {

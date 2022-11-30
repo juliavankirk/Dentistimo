@@ -31,7 +31,7 @@ module.exports = function(app) {
   );
 
   app.get(
-    "/api/test/dental-office",
+    "/api/test/dentist",
     [authJwt.verifyToken, authJwt.isDentist],
     controller.dentistBoard
   );

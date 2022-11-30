@@ -1,15 +1,15 @@
 const config = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(  
+const sequelize = new Sequelize(
     config.DB,
     config.USER,
     config.PASSWORD,
     {
       host: config.HOST,
+      port: config.PORT,
       dialect: config.dialect,
-      operatorsAliases: false,
-  
+
       pool: {
         max: config.pool.max,
         min: config.pool.min,
@@ -23,26 +23,24 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = require("../models/user.model.js")(sequelize, Sequelize);
-db.role = require("../models/role.model.js")(sequelize, Sequelize);
-db.patient_details = require("../models/patient_details.model.js")
+db.user = require("./user.model.js")(sequelize, Sequelize);
+db.role = require("./role.model.js")(sequelize, Sequelize);
+db.user_roles = require("./user-roles.model")(sequelize, Sequelize);
+db.patient_details = require("./patient_details.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
     through: "user_roles",
     foreignKey: "roleId",
     otherKey: "userId"
 });
-db.user.belongsTo(db.role, {
+db.user.belongsToMany(db.role, {
     through: "user_roles",
     foreignKey: "userId",
     otherKey: "roleId"
 });
 
-db.patient_details = belongsTo(db.user, {
-  through: "patient_details",
-  foreignKey: "userId",
-  otherKey: "Patient_DetailsId"
-})
+db.patient_details.belongsTo(db.user,{ foreignKey: 'userId', targetKey: 'id' });
+db.user.hasOne(db.patient_details,{ foreignKey: 'userId', targetKey: 'id' });
 
 db.ROLES = ["user", "patient", "dental-office-admin", "dentist"];
 
