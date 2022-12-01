@@ -8,7 +8,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
-// import { login } from "../actions/auth";
+import { login } from "../actions/auth";
 
 const required = (value) => {
   if (!value) {
@@ -52,18 +52,18 @@ const Login = (props) => {
 
     form.current.validateAll();
 
-    // if (checkBtn.current.context._errors.length === 0) {
-    //   dispatch(login(username, password))
-    //     .then(() => {
-    //       navigate("/profile");
-    //       window.location.reload();
-    //     })
-    //     .catch(() => {
-    //       setLoading(false);
-    //     });
-    // } else {
-    //   setLoading(false);
-    // }
+    if (checkBtn.current.context._errors.length === 0) {
+      dispatch(login(username, password))
+        .then(() => {
+          navigate("/profile");
+          window.location.reload();
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
   };
 
   if (isLoggedIn) {

@@ -8,8 +8,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
-// pending auth microservice
-// import { register } from "../actions/auth"; 
+import { register } from "../actions/auth"; 
 
 const required = (value) => {
   if (!value) {
@@ -85,15 +84,15 @@ const Register = () => {
 
     form.current.validateAll();
 
-    // if (checkBtn.current.context._errors.length === 0) {
-    //   dispatch(register(username, email, password))
-    //     .then(() => {
-    //       setSuccessful(true);
-    //     })
-    //     .catch(() => {
-    //       setSuccessful(false);
-    // });
-    // }
+    if (checkBtn.current.context._errors.length === 0) {
+      dispatch(register(username, email, password))
+        .then(() => {
+          setSuccessful(true);
+        })
+        .catch(() => {
+          setSuccessful(false);
+    });
+    }
   };
 
   return ( 
