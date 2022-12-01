@@ -7,7 +7,8 @@ const HomePage = (props) => {
             <br/>
             <div>
                 <ul>
-                    <li><Link to={'/register'}>Sign up/in</Link></li>
+                    <li><Link to={'/register'}>Sign up</Link></li>
+                    <li><Link to={'/login'}>Sign in</Link></li>
                     <li><Link to={'/user-dashboard'}>User Dashboard</Link></li>
                     <li><Link to={'/dentist-dashboard'}>Dentist Dashboard</Link></li>
                     <li><Link to={'/office-dashboard'}>Office Dashboard</Link></li>
