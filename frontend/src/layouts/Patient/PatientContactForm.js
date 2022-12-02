@@ -1,5 +1,4 @@
-import { useState } from "react";
-import React from "react";
+import React, {useState} from "react";
 import {
   Form,
   Button,
@@ -8,12 +7,12 @@ import {
   FormLabel,
   FormSelect,
 } from "react-bootstrap";
-const PatientContactForm = () => {
+export default function PatientContactForm() {
   const [clinicName, newClinicName] = useState("");
   const [title, newTitle] = useState("");
   const [message, newMessage] = useState("");
 
-  const onSubmit = (e) => {
+  function onSubmit (e)  {
     e.preventDefault();
     const patientContact = {
       clinicName,
@@ -25,7 +24,7 @@ const PatientContactForm = () => {
   return (
       <Form classname="ml-5" onSubmit={onSubmit}>
       <h5 className="mb-3"> Send messages to your dentist or clinic here</h5>
-      <FormGroup className="mb-5" >
+      <FormGroup className="mb-4" >
         <FormLabel>Choose your Clinic</FormLabel>
         <FormSelect
           id="clinicName"
@@ -37,13 +36,13 @@ const PatientContactForm = () => {
           <option value="" selected hidden>
             &lt;----Select your clinic----&gt;
           </option>
-          <option value="Your Dentist">Your Dentist</option>
+          <option>Your Dentist</option>
           <option>Tooth Fairy Dentist</option>
           <option>The Crown</option>
           <option>Lisebergs Dentists</option>
         </FormSelect>
       </FormGroup>
-      <FormGroup className="mb-5" >
+      <FormGroup className="mb-4" >
         <FormLabel htmlFor="title">Message Title</FormLabel>
         <FormControl
           type="text"
@@ -55,7 +54,7 @@ const PatientContactForm = () => {
           required
         ></FormControl>
       </FormGroup>
-      <FormGroup className="mb-5" >
+      <FormGroup className="mb-4" >
         <FormLabel>Message</FormLabel>
         <FormControl
           type="text"
@@ -75,4 +74,4 @@ const PatientContactForm = () => {
     </Form>
   );
 };
-export default PatientContactForm;
+
