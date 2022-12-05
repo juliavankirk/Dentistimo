@@ -1,3 +1,3 @@
 module.exports = {
-    secret: "team12-is-the-best"
-}
+    secret: 'team12-is-the-best'
+};

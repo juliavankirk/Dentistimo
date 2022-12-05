@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const PatientDetails = sequelize.define("patient_details", {
+    const PatientDetails = sequelize.define('patient_details', {
         birthday: {
             type: Sequelize.DATEONLY
         },
@@ -9,4 +9,4 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     return PatientDetails;
-}
+};
