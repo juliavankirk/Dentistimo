@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-undef */
 const db = require('../models');
 const config = require('../config/auth.config');

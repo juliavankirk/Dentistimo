@@ -156,7 +156,7 @@ const Register = () => {
                             </div>
 
                             <div className="form-group">
-                              <label htmlFor="name">Date of birth</label>
+                              <label htmlFor="bday">Date of birth</label>
                               <input
                                 type="text"
                                 className="form-control"

@@ -68,7 +68,6 @@ const Register = () => {
 
     setSuccessful(false);
 
-    if (checkBtn.current.context._errors.length === 0) {
       dispatch(register(name, email, password))
         .then(() => {
           setSuccessful(true);
@@ -76,7 +75,7 @@ const Register = () => {
         .catch(() => {
           setSuccessful(false);
     });
-    }
+
   };
 
 const navigate = useNavigate();

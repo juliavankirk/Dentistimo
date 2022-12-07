@@ -2,18 +2,40 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8080/api/auth/";
 
-const register = (username, email, password) => {
+//register dental office admin
+const registerAdmin = (name, email, password) => {
   return axios.post(API_URL + "signup", {
-    username,
+    name,
     email,
     password,
+    roles: ['dental-office-admin']
   });
 };
 
-const login = (username, password) => {
+const registerPatient = (name, email, birthday, address, password) => {
+  return axios.post(API_URL + "signup", {
+    name,
+    email,
+    birthday,
+    address,
+    password,
+    roles: ['patient']
+  });
+};
+
+const registerDoctor = (name, email, password) => {
+  return axios.post(API_URL + "signup", {
+    name,
+    email,
+    password,
+    roles: ['dentist']
+  });
+};
+
+const login = (email, password) => {
   return axios
     .post(API_URL + "signin", {
-      username,
+      email,
       password,
     })
     .then((response) => {
@@ -30,7 +52,9 @@ const logout = () => {
 };
 
 export default {
-  register,
+  registerAdmin,
+  registerPatient,
+  registerDoctor,
   login,
   logout,
 };

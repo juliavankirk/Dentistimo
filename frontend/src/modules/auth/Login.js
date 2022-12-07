@@ -32,7 +32,6 @@ const Login = (props) => {
     e.preventDefault();
     setLoading(true);
 
-    if (checkBtn.current.context._errors.length === 0) {
       dispatch(login(username, password))
         .then(() => {
           navigate("/profile");
@@ -41,9 +40,6 @@ const Login = (props) => {
         .catch(() => {
           setLoading(false);
         });
-    } else {
-      setLoading(false);
-    }
   };
 
   const imgSyle = {
