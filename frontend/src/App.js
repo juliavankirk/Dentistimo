@@ -3,14 +3,14 @@ import {
   Route,
   Routes
 } from 'react-router-dom';
-import HomePage from './layouts/HomePage';
-import OfficeDashboard from './layouts/OfficeDashboard';
-import UserDashboard from './layouts/UserDashboard';
-import DentistDashboard from './layouts/DentistDashboard';
+import HomePage from './modules/HomePage';
+import OfficeDashboard from './modules/dashboards/OfficeDashboard';
+import UserDashboard from './modules/dashboards/UserDashboard';
+import DentistDashboard from './modules/dashboards/DentistDashboard';
 import MainLayout from './layouts/MainLayout/MainLayout';
-import Register from './layouts/Auth/Register';
-import Login from './layouts/Auth/Login';
-import NotFound from './layouts/NotFound';
+import Register from './modules/auth/Register';
+import Login from './modules/auth/Login';
+import NotFound from './modules/NotFound';
 
 function App() {
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { CDBFooter, CDBBox} from 'cdbreact';
-import Logo from '../Logo';
+import Logo from '../../assets/Logo';
 
 export const Footer = () => {
     return (

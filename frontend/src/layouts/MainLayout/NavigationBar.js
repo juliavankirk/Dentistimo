@@ -5,9 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Dropdown from 'react-bootstrap/Dropdown';
 import NavItem from 'react-bootstrap/NavItem';
 
-
-import Logo from '../Logo';
-
+import Logo from '../../assets/Logo';
 
 const NavigationBar = (props) => {
     return (
