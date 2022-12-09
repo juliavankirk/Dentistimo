@@ -29,7 +29,7 @@ exports.signup = (req, res) => {
                 }).then(roles => {
                     if (req.body.roles.includes('patient')) {
                         Patient_details.create({
-                            birthday: req.body.birthday,
+                            personalNumber: req.body.personalNumber,
                             address: req.body.address,
                             userId: user.id
                         });
