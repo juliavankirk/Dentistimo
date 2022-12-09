@@ -7,6 +7,18 @@ import MainLayout from "./layouts/MainLayout/MainLayout";
 import Register from "./layouts/Register";
 import NotFound from "./layouts/NotFound";
 
+const mongoose = require("mongoose");
+const express = require("express");
+//const morgan = require("morgan");
+
+const app = express();
+
+
+
+mongoose.connect('mongodb://localhost:27017')
+.then(() => console.log('Connected to MongoDB...'))
+.catch(err => console.error('Could not connect to MongoDB...'));
+
 function App() {
   return (
     <div className="App">

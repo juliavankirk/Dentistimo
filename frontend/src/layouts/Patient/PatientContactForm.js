@@ -11,15 +11,18 @@ export default function PatientContactForm() {
   const [clinicName, newClinicName] = useState("");
   const [title, newTitle] = useState("");
   const [message, newMessage] = useState("");
+  const Messages = require("../../Mong/Messages");
+  const mongoose = require("mongoose");
 
   function onSubmit (e)  {
     e.preventDefault();
-    const patientContact = {
+    const messages = new Messages( {
       clinicName,
       title,
       message,
-    };
-    console.log(patientContact);
+    });
+    messages.save();
+    console.log(messages);
   };
   return (
       <Form classname="ml-5" onSubmit={onSubmit}>
