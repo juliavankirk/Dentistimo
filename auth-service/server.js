@@ -1,8 +1,13 @@
 const express = require("express");
+const app = express();
+const axios = require("axios");
+const HOST = process.env.HOSTNAME || "localhost";
+const PORT = process.env.PORT || 3001;
+
+app.use(express.json());
+
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
-const app = express();
 
 app.use(cors({
     origin: function (origin, callback) {
@@ -43,7 +48,22 @@ app.get("/", (req, res) => {
 require('./routes/auth.routes.js')(app);
 require('./routes/user.routes.js')(app);
 
-const PORT = 8080;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-});
+    axios({
+      method: "POST",
+      url: "http://mockapi.e-nomads.com:3001/",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: {
+        serviceName: "authentication-service",
+        protocol: "http",
+        host: HOST,
+        port: PORT,
+        enabled: true
+      },
+    }).then((response) => {
+      console.log(response.data);
+    });
+    console.log("Authentication service server started on port " + PORT);
+  });
