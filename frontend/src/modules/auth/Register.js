@@ -1,13 +1,12 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import DatePicker from 'react-date-picker';
 
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-
-import { register } from "../../actions/auth";
+import { registerPatient } from "../../actions/auth";
 import dentistry from "../../assets/dentistry.png";
 import { Link,useNavigate } from "react-router-dom";
+
+import 'react-calendar/dist/Calendar.css';
 
 const required = (value) => {
   if (!value) {
@@ -41,11 +40,12 @@ const vpassword = (value) => {
 
 const Register = () => {
   const form = useRef();
-  const checkBtn = useRef();
+  const navigate = useNavigate();
 
   const [name, setName] = useState(""); 
   const [address, setAddress] = useState("");
-  const [bday, setBday] = useState("");
+  // const [bday, setBday] = useState("");
+  const [birthday, setBday] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
@@ -64,8 +64,8 @@ const Register = () => {
   };
 
   const onChangeBday = (e) => {
-    const bday = e.target.value;
-    setBday(bday);
+    const birthday = e.target.value;
+    setBday(birthday);
   };
 
   const onChangeEmail = (e) => {
@@ -83,24 +83,22 @@ const Register = () => {
 
     setSuccessful(false);
 
-    if (checkBtn.current.context._errors.length === 0) {
-      dispatch(register(name, email, password))
+      dispatch(registerPatient(name, email, birthday, address, password))
         .then(() => {
           setSuccessful(true);
         })
         .catch(() => {
           setSuccessful(false);
     });
-    }
-  };
-  //
-  const navigate = useNavigate();
 
-  const registerUser = () => {
+  };
+  
+  
+  const goToRegisterPatient = () => {
     navigate("/register");
   }
 
-  const registerClinic = () => {
+  const goToRegisterAdmin = () => {
     navigate("/register-clinic");
   }
 
@@ -122,10 +120,10 @@ const Register = () => {
                 <div class="card-text">
                     <div className="row">
                       <div className="col">
-                        <button className="btn btn-primary btn-block" onClick={registerUser}>Patient</button>
+                        <button className="btn btn-primary btn-block" onClick={goToRegisterPatient}>Patient</button>
                       </div>
                       <div className="col">
-                        <button className="btn btn-primary btn-block" onClick={registerClinic}>Clinic</button>
+                        <button className="btn btn-primary btn-block" onClick={goToRegisterAdmin}>Clinic Admin</button>
                       </div>
 
                       <form onSubmit={handleRegister} ref={form}>
@@ -157,11 +155,16 @@ const Register = () => {
 
                             <div className="form-group">
                               <label htmlFor="bday">Date of birth</label>
+                              {/* <DatePicker 
+                              onChange={setBday()}
+                              value={bday} 
+                              dateFormat="dd/MM/yyyy"/> */}
+
                               <input
                                 type="text"
                                 className="form-control"
                                 name="bday"
-                                value={bday}
+                                value={birthday}
                                 onChange={onChangeBday}
                                 // validations={[required, vbday]}
                               />
@@ -204,7 +207,7 @@ const Register = () => {
                             </div>
                           </div>
                         )}
-                        <button style={{ display: "none" }} ref={checkBtn} />
+                        <button style={{ display: "none" }} />
                       </form>
                   </div>
                 </div>

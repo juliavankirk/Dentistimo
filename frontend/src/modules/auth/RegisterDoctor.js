@@ -1,9 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { registerAdmin } from "../../actions/auth";
-import dentistry from "../../assets/dentistry.png";
-import { Link, useNavigate } from "react-router-dom";
+import { registerDoctor } from "../../actions/auth";
 
 const required = (value) => {
   if (!value) {
@@ -38,8 +36,6 @@ const vpassword = (value) => {
 
 const Register = () => {
   const form = useRef();
-  const checkBtn = useRef();
-
   const [name, setName] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -68,7 +64,7 @@ const Register = () => {
 
     setSuccessful(false);
 
-      dispatch(registerAdmin(name, email, password))
+      dispatch(registerDoctor(name, email, password))
         .then(() => {
           setSuccessful(true);
         })
@@ -78,39 +74,20 @@ const Register = () => {
 
   };
 
-const navigate = useNavigate();
-
-const goToRegisterUser = () => {
-  navigate("/register");
-}
-
-const goToRegisterClinic = () => {
-  navigate("/register-clinic");
-}
 
  const cardStyle = {
   'max-width': '1040px'
  }
 
- const imgSyle = {
-  'max-width': '540px'
- }
   return (
     <section>
         <div class="card mb-3" style={cardStyle}>
           <div class="row g-0">
             <div class="col-md-6">
               <div class="card-body">
-                <h2 class="card-title">Register</h2>
+                <h2 class="card-title">Register a doctor</h2>
                 
                 <div class="card-text">
-                    <div className="row">
-                      <div className="col">
-                        <button className="btn btn-primary btn-block"onClick={goToRegisterUser}>Patient</button>
-                      </div>
-                      <div className="col">
-                        <button className="btn btn-primary btn-block" onClick={goToRegisterClinic}>Clinic Admin</button>
-                      </div>
 
                       <form onSubmit={handleRegister} ref={form}>
                         {!successful && (
@@ -164,22 +141,12 @@ const goToRegisterClinic = () => {
                             </div>
                           </div>
                         )}
-                        <button style={{ display: "none" }} ref={checkBtn} />
+                        <button style={{ display: "none" }} />
                       </form>
                   </div>
                 </div>
-                <p class="card-text"><small>Already a member? <Link to={'/login'}>Click here to log in.</Link></small></p>
               </div>
             </div>
-            <div class="col-md-4">
-              <img
-                  src={dentistry}
-                  alt="dentistry"
-                  className="profile-img-card"
-                  style={imgSyle}
-                />
-            </div>
-          </div>
         </div>
     </section>
     
