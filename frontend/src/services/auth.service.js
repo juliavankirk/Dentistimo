@@ -12,11 +12,11 @@ const registerAdmin = (name, email, password) => {
   });
 };
 
-const registerPatient = (name, email, birthday, address, password) => {
+const registerPatient = (name, email, personalNumber, address, password) => {
   return axios.post(API_URL + "signup", {
     name,
     email,
-    birthday,
+    personalNumber,
     address,
     password,
     roles: ['patient']

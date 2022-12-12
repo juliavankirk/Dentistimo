@@ -44,8 +44,7 @@ const Register = () => {
 
   const [name, setName] = useState(""); 
   const [address, setAddress] = useState("");
-  // const [bday, setBday] = useState("");
-  const [birthday, setBday] = useState("");
+  const [personalNumber, setPersonalNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
@@ -63,10 +62,11 @@ const Register = () => {
     setAddress(address);
   };
 
-  const onChangeBday = (e) => {
-    const birthday = e.target.value;
-    setBday(birthday);
+  const onChangePN = (e) => {
+    const personalNumber = e.target.value;
+    setPersonalNumber(personalNumber);
   };
+
 
   const onChangeEmail = (e) => {
     const email = e.target.value;
@@ -83,7 +83,7 @@ const Register = () => {
 
     setSuccessful(false);
 
-      dispatch(registerPatient(name, email, birthday, address, password))
+      dispatch(registerPatient(name, email, personalNumber, address, password))
         .then(() => {
           setSuccessful(true);
         })
@@ -137,7 +137,6 @@ const Register = () => {
                                 name="name"
                                 value={name}
                                 onChange={onChangeName}
-                                validations={[required, vname]}
                               />
                             </div>
 
@@ -149,24 +148,17 @@ const Register = () => {
                                 name="address"
                                 value={address}
                                 onChange={onChangeAddress}
-                                // validations={[required, vaddress]}
                               />
                             </div>
 
                             <div className="form-group">
-                              <label htmlFor="bday">Date of birth</label>
-                              {/* <DatePicker 
-                              onChange={setBday()}
-                              value={bday} 
-                              dateFormat="dd/MM/yyyy"/> */}
-
+                              <label htmlFor="personalNumber">Personal number</label>
                               <input
                                 type="text"
                                 className="form-control"
-                                name="bday"
-                                value={birthday}
-                                onChange={onChangeBday}
-                                // validations={[required, vbday]}
+                                name="address"
+                                value={personalNumber}
+                                onChange={onChangePN}
                               />
                             </div>
 
@@ -178,7 +170,6 @@ const Register = () => {
                                 name="email"
                                 value={email}
                                 onChange={onChangeEmail}
-                                validations={[required]}
                               />
                             </div>
 
@@ -190,7 +181,6 @@ const Register = () => {
                                 name="password"
                                 value={password}
                                 onChange={onChangePassword}
-                                validations={[required, vpassword]}
                               />
                             </div>
 
