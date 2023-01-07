@@ -26,10 +26,7 @@ interface Clinic {
 
 export const clinicApi = {
   getAllClinics: async <ClinicType>() => {
-    let result;
-    result = await Api.get<ClinicType[]>(`/clinics`);
-    console.log(result)
-    return result;
+   return await Api.get<ClinicType[]>(`/clinics`)
   },
 
   getClinic: async (clinicId: string) => {

@@ -4,8 +4,8 @@ import { Wrapper, Status } from "@googlemaps/react-wrapper";
 
 import Home from './Home/Home'
 import BookAppointment from './Appointments/BookAppointment'
-import Unavailable from './Unavaiable';
-import NotFound from './NotFound';
+import Unavailable from './ErrorPages/Unavailable';
+import NotFound from './ErrorPages/NotFound';
 
 const render = (status: Status): ReactElement => {
   if (status === Status.LOADING) return <h3>{status} ..</h3>;

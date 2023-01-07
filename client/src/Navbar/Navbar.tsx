@@ -40,9 +40,6 @@ const MenuLink = styled(NavLink)`
     font-family: "DMSans-Regular";
 `
 
-const Underline = styled.div`
-`
-
 const Navbar = () => {
   return (
     <Nav>
@@ -51,16 +48,7 @@ const Navbar = () => {
         </MenuLink>
         <Menu>
             <MenuLink to="/">
-                <span>Home</span>
-                <Underline>
-
-                </Underline>
-            </MenuLink>
-            <MenuLink to="/appointments">
-                <span>Appointments</span>
-                <Underline>
-                    
-                </Underline>
+                <span>Clinic Registry</span>
             </MenuLink>
         </Menu>
     </Nav>

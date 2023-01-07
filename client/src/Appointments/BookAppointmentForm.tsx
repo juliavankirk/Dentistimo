@@ -39,7 +39,7 @@ class BookAppointmentForm extends React.Component<any,any> {
         const dateString = this.state.bookingData.y + "-" + this.state.bookingData.m + "-" + this.state.bookingData.d
         const id = this.state.bookingData.clinicId
         async function getTimeSlots(date:string) {
-            const data = await appointmentApi.getAppointments(id,dateString); 
+            const data = await appointmentApi.getAppointments(id, dateString); 
             
             return data;
         }
@@ -47,6 +47,8 @@ class BookAppointmentForm extends React.Component<any,any> {
         getTimeSlots(dateString).then(resp => {
             console.log(resp.data.timeSlots);
             this.setState({timeSlots: resp.data.timeSlots});  
+            this.setState({selectedTime:resp.data.timeSlots[0].time})
+            console.log(this.state.selectedTime)
           }).catch(err => {
             console.log(err)
             console.log( this.props.navigation)
@@ -83,11 +85,11 @@ class BookAppointmentForm extends React.Component<any,any> {
 
         appointmentApi.makeAppointment(data)
             .then((response: any) => {
-                this.setState({response:'Thank you for your request! Please check your email to find your booking confirmation!'});
+                this.setState({response:'Thank you for choosing Dentistimo! We are now processing your request, please check your email to find the status of your booking request.'});
                 console.log(response);
             })
             .catch((err: Error) => {
-                this.setState({response:'We could not process your request! Please try again later!'});
+                this.setState({response:'We could not process your request. Please try again later!'});
                 console.log(err);
                 
             })
@@ -152,7 +154,7 @@ class BookAppointmentForm extends React.Component<any,any> {
             {this.checkAvailabitily(this.state.timeSlots) && (
                 <>
                     <div className="form-group">
-                    <label htmlFor="selectedTime">Select a slot*</label>
+                    <label htmlFor="selectedTime">Select a time*</label>
                     <Form.Select name="selectedTime" onChange={this.handleChange}>
                         {this.state.timeSlots.map((slot: { available: boolean; time: string; }) => {
                             if(slot.available){

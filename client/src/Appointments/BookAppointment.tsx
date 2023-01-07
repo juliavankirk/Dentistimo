@@ -133,23 +133,23 @@ const BookAppointment = () => {
     console.log(data.data)
     return data;
   }
+
   useEffect(() => {
     const date = data.y + "-" + data.m + "-" +data.d;
     getClinicData(clinicId).then( resp =>{
+      console.log(resp.data)
       setClinicData(resp.data)
-      console.log(clinicData)
     }).catch(err => {
       console.log(err)
-      navigate('/unavailable')
+      //navigate('/unavailable')
     }) 
 
     getAppointmentData(clinicId,date).then( resp =>{
       console.log(resp.data)
     }).catch(err => {
       console.log(err)
-      navigate('/unavailable')
+      //navigate('/unavailable')
     })
-
   },[])
 
 

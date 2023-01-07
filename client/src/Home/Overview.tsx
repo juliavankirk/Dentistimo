@@ -65,7 +65,6 @@ const Home = () => {
   if ( date && clinic?.clinicId ) {
     handleClick = false;
   } else {
-   console.log("I am not clickable");
     handleClick = true;
   }
 
