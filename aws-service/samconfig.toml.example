@@ -1,0 +1,26 @@
+# SAM Configuration File
+# Copy this to samconfig.toml and fill in your values
+# Run: sam deploy --config-file samconfig.toml
+
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "dentistimo-stack"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = false
+
+# Parameter overrides - customize these
+parameter_overrides = [
+    "Environment=dev",
+    "FromEmail=your-verified-email@example.com",
+    "AllowedOrigins=*"
+]
+
+# Tags for cost tracking
+tags = "Project=\"Dentistimo\" Environment=\"dev\""
+
+[default.build.parameters]
+cached = true
+parallel = true

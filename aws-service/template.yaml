@@ -1,0 +1,267 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Dentistimo - Dental Appointment Booking System
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+    Description: Deployment environment
+
+  FromEmail:
+    Type: String
+    Description: Verified SES email address for sending notifications
+
+  AllowedOrigins:
+    Type: String
+    Default: '*'
+    Description: CORS allowed origins (use specific domain in production)
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    MemorySize: 256
+    Timeout: 30
+    Tracing: Active
+    Environment:
+      Variables:
+        CLINICS_TABLE: !Ref ClinicsTable
+        APPOINTMENTS_TABLE: !Ref AppointmentsTable
+
+Resources:
+  # ============================================
+  # API Gateway
+  # ============================================
+  DentistimoApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub dentistimo-api-${Environment}
+      StageName: !Ref Environment
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+        AllowOrigin: !Sub "'${AllowedOrigins}'"
+        MaxAge: "'600'"
+      TracingEnabled: true
+
+  # ============================================
+  # Lambda Functions
+  # ============================================
+  GetClinicsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub dentistimo-get-clinics-${Environment}
+      Description: Get all dental clinics
+      CodeUri: src/getClinics/
+      Handler: index.handler
+      Events:
+        GetClinics:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DentistimoApi
+            Path: /clinics/
+            Method: GET
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ClinicsTable
+
+  GetClinicFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub dentistimo-get-clinic-${Environment}
+      Description: Get a single clinic by ID
+      CodeUri: src/GetClinic/
+      Handler: index.handler
+      Events:
+        GetClinic:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DentistimoApi
+            Path: /clinics/{clinicId}
+            Method: GET
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ClinicsTable
+
+  GetScheduleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub dentistimo-get-schedule-${Environment}
+      Description: Get schedule for a clinic on a specific date
+      CodeUri: src/GetSchedule/
+      Handler: index.handler
+      Events:
+        GetSchedule:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DentistimoApi
+            Path: /schedule/{clinicId}/{date}
+            Method: GET
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ClinicsTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref AppointmentsTable
+
+  BookAppointmentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub dentistimo-book-appointment-${Environment}
+      Description: Publish booking request to EventBridge
+      CodeUri: src/bookAppointmentEB/
+      Handler: index.handler
+      Environment:
+        Variables:
+          EVENT_BUS_NAME: !Ref DentistimoEventBus
+      Events:
+        BookAppointment:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DentistimoApi
+            Path: /schedule/
+            Method: POST
+      Policies:
+        - EventBridgePutEventsPolicy:
+            EventBusName: !Ref DentistimoEventBus
+
+  ProcessBookingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub dentistimo-process-booking-${Environment}
+      Description: Process booking from EventBridge and save to DynamoDB
+      CodeUri: src/bookAppointmentDDB/
+      Handler: index.handler
+      Environment:
+        Variables:
+          FROM_EMAIL: !Ref FromEmail
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ClinicsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AppointmentsTable
+        - SESCrudPolicy:
+            IdentityName: !Ref FromEmail
+
+  # ============================================
+  # EventBridge
+  # ============================================
+  DentistimoEventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Sub dentistimo-events-${Environment}
+
+  BookingEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub dentistimo-booking-rule-${Environment}
+      EventBusName: !Ref DentistimoEventBus
+      EventPattern:
+        detail-type:
+          - CreateAppointment
+      State: ENABLED
+      Targets:
+        - Id: ProcessBookingTarget
+          Arn: !GetAtt ProcessBookingFunction.Arn
+
+  ProcessBookingPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref ProcessBookingFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt BookingEventRule.Arn
+
+  # ============================================
+  # DynamoDB Tables
+  # ============================================
+  ClinicsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub dentistimo-clinics-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: clinicId
+          AttributeType: N
+      KeySchema:
+        - AttributeName: clinicId
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+
+  AppointmentsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub dentistimo-appointments-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: clinicId
+          AttributeType: N
+        - AttributeName: date
+          AttributeType: S
+      KeySchema:
+        - AttributeName: clinicId
+          KeyType: HASH
+        - AttributeName: date
+          KeyType: RANGE
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+
+  # ============================================
+  # CloudWatch Log Groups
+  # ============================================
+  GetClinicsLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetClinicsFunction}
+      RetentionInDays: 14
+
+  GetClinicLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetClinicFunction}
+      RetentionInDays: 14
+
+  GetScheduleLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetScheduleFunction}
+      RetentionInDays: 14
+
+  BookAppointmentLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${BookAppointmentFunction}
+      RetentionInDays: 14
+
+  ProcessBookingLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${ProcessBookingFunction}
+      RetentionInDays: 14
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub https://${DentistimoApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/
+    Export:
+      Name: !Sub ${AWS::StackName}-ApiEndpoint
+
+  ClinicsTableName:
+    Description: DynamoDB Clinics table name
+    Value: !Ref ClinicsTable
+
+  AppointmentsTableName:
+    Description: DynamoDB Appointments table name
+    Value: !Ref AppointmentsTable
+
+  EventBusName:
+    Description: EventBridge bus name
+    Value: !Ref DentistimoEventBus

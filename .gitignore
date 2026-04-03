@@ -356,5 +356,25 @@ server/.idea/modules.xml
 server/.idea/server.iml
 server/.idea/vcs.xml
 
-# End of https://www.toptal.com/developers/gitignore/api/node,vuejs,visualstudiocode,linux,macos,windows,webstorm+all   `
+# End of https://www.toptal.com/developers/gitignore/api/node,vuejs,visualstudiocode,linux,macos,windows,webstorm+all
+
+### AWS SAM ###
+# SAM build artifacts
+.aws-sam/
+aws-service/.aws-sam/
+
+# SAM config with your deployment settings (use samconfig.toml.example as template)
+samconfig.toml
+aws-service/samconfig.toml
+
+# Lambda zip packages
+*.zip
+
+### Environment Files ###
+# Local environment files (use .env.example as template)
+.env
+.env.local
+.env.*.local
+frontend/.env.local
+aws-service/.env
 

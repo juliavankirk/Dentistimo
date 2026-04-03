@@ -134,7 +134,7 @@ Resources:
       CodeUri: s3://dentistimogbg/GetClinic.zip
       FunctionName: getClinic
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -166,7 +166,7 @@ Resources:
       CodeUri: s3://dentistimogbg/GetClinics.zip
       FunctionName: getClinics
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -198,7 +198,7 @@ Resources:
       CodeUri: s3://dentistimogbg/GetSchedule.zip
       FunctionName: getSchedule
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -236,7 +236,7 @@ Resources:
       CodeUri: s3://dentistimogbg/BookAppointmentEB.zip
       FunctionName: bookAppointmentEB
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -268,7 +268,7 @@ Resources:
       CodeUri: s3://dentistimogbg/BookAppointmentDDB.zip
       FunctionName: bookAppointmentDDB
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
